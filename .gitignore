@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Env
+.env
+
+# Models
+*.pt
+*.pkl
+*.joblib
+
+# Logs
+logs/*.log
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+
+calendar_integration/credentials.json
+calendar_integration/token.json
+debug.log
+logging/*.db
