@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalnia:wdth,wght@100..200,100..900&family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --bg: #0b0a08;
+  --bg-elevated: #141210;
+  --panel: rgba(255, 255, 255, 0.04);
+  --panel-border: rgba(178, 133, 97, 0.22);
+  --primary: #f5e6d3;
+  --secondary: #b28561;
+  --accent: #e0a458;
+  --accent-glow: rgba(224, 164, 88, 0.35);
+  --muted: #a89686;
+  --success: #7fb37a;
+  --warning: #e0b458;
+  --danger: #d17a6a;
+
+  font-family: 'Inria Serif', serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--primary);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+code, pre, .mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-elevated);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
