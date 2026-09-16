@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mock Bill Payment Portal</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #0d0d0d; color: #eee; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 32px; width: 360px; }
+  h2 { margin-top: 0; color: #f0a860; }
+  label { display: block; margin: 14px 0 6px; font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; }
+  input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; font-size: 14px; }
+  button { margin-top: 20px; width: 100%; padding: 12px; border: none; border-radius: 6px; background: #f0a860; color: #1a1a1a; font-weight: bold; cursor: pointer; font-size: 15px; }
+  button:hover { background: #f5b878; }
+  #confirmation { display: none; margin-top: 18px; padding: 12px; background: #163d2b; border: 1px solid #2f7a4f; border-radius: 8px; color: #7ee6a0; font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>💳 Bill Payment Portal</h2>
+    <form id="bill-form">
+      <label for="amount">Amount (₹)</label>
+      <input type="number" id="amount" name="amount" required>
+
+      <label for="payee">Payee</label>
+      <input type="text" id="payee" name="payee" required>
+
+      <label for="due">Due Date</label>
+      <input type="date" id="due" name="due" required>
+
+      <button type="submit" id="submit-btn">Pay Now</button>
+    </form>
+    <div id="confirmation">✅ Payment submitted! Confirmation ID: <span id="conf-id"></span></div>
+  </div>
+
+  <script>
+    document.getElementById('bill-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const confId = 'PAY-' + Math.random().toString(36).slice(2, 10).toUpperCase();
+      document.getElementById('conf-id').textContent = confId;
+      document.getElementById('confirmation').style.display = 'block';
+      document.getElementById('submit-btn').disabled = true;
+      document.getElementById('submit-btn').textContent = 'Paid ✓';
+    });
+  </script>
+</body>
+</html>
