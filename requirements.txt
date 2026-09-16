@@ -1,0 +1,38 @@
+# Core API
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+structlog==24.4.0
+
+# ML / Inference
+torch==2.5.1
+numpy==1.26.4
+scikit-learn==1.5.2
+joblib==1.4.2
+sentence-transformers==3.3.1
+
+# Testing / Client
+requests==2.32.3
+pytest==8.3.4
+# Add these to your existing requirements.txt
+
+# Logging (Phase 1)
+sqlalchemy
+psycopg2-binary
+
+# Calendar integration (Phase 1)
+google-auth-oauthlib
+google-api-python-client
+
+# Datasets (Phase 2)
+requests
+tqdm
+datasets          # HuggingFace, for PANDORA mirror
+
+# Training (Phase 3)
+torch
+scikit-learn
+sentence-transformers
+joblib
+pandas
+numpy
