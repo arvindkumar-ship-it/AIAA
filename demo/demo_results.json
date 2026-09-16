@@ -1,0 +1,114 @@
+[
+  {
+    "task_num": 1,
+    "task_type": "bill_payment",
+    "input": {
+      "amount": 150,
+      "payee": "Electric Co",
+      "due": "2026-09-20"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.23622727394104004
+  },
+  {
+    "task_num": 2,
+    "task_type": "bill_payment",
+    "input": {
+      "amount": 900,
+      "payee": "Electric Co",
+      "due": "2026-09-20"
+    },
+    "status": "completed",
+    "intervention_required": true,
+    "execution_time": 2.295132875442505
+  },
+  {
+    "task_num": 3,
+    "task_type": "appointment",
+    "input": {
+      "title": "Dentist",
+      "time": "10:00 AM"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.17596793174743652
+  },
+  {
+    "task_num": 4,
+    "task_type": "appointment",
+    "input": {
+      "title": "Doctor",
+      "time": "3:00 PM"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.1800544261932373
+  },
+  {
+    "task_num": 5,
+    "task_type": "paperwork",
+    "input": {
+      "form_type": "Tax W-8BEN"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.25661158561706543
+  },
+  {
+    "task_num": 6,
+    "task_type": "bill_payment",
+    "input": {
+      "amount": 50,
+      "payee": "Internet Co",
+      "due": "2026-09-25"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.18799352645874023
+  },
+  {
+    "task_num": 7,
+    "task_type": "appointment",
+    "input": {
+      "title": "Gym",
+      "time": "6:00 PM"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.20412921905517578
+  },
+  {
+    "task_num": 8,
+    "task_type": "bill_payment",
+    "input": {
+      "amount": 1200,
+      "payee": "Credit Card",
+      "due": "2026-09-22"
+    },
+    "status": "completed",
+    "intervention_required": true,
+    "execution_time": 2.1963746547698975
+  },
+  {
+    "task_num": 9,
+    "task_type": "paperwork",
+    "input": {
+      "form_type": "Passport Form"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.18448519706726074
+  },
+  {
+    "task_num": 10,
+    "task_type": "appointment",
+    "input": {
+      "title": "Salon",
+      "time": "2:00 PM"
+    },
+    "status": "completed",
+    "intervention_required": false,
+    "execution_time": 0.19010233879089355
+  }
+]
