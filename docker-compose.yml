@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - CORS_ORIGINS=http://localhost:5173
+      - HOST=0.0.0.0
+      - PORT=8001
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8001
+    depends_on:
+      - backend
