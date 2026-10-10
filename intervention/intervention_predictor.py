@@ -23,7 +23,6 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 import json
 import os
-from sklearn.calibration import CalibratedClassifierCV
 from sklearn.linear_model import LogisticRegression
 import time
 
@@ -110,15 +109,18 @@ class InterventionPredictorModel(nn.Module):
 
 
 class InterventionPredictor:
-    def __init__(self, model_path: str = "./intervention/model.pt", calibrate: bool = True):
+    def __init__(self, model_path: str = "./intervention/model.pt", calibrate: bool = False, calibration_data=None):
         self.model_path = model_path
         self.model = InterventionPredictorModel()
+        self.weights_loaded = False
         self._load_weights()
         self.model.eval()
 
         self.calibrator = None
         if calibrate:
-            self._train_calibrator()
+            if calibration_data is None:
+                raise ValueError("Calibration requires held-out model scores and real labels")
+            self._train_calibrator(*calibration_data)
 
     def _load_weights(self):
         """
@@ -126,19 +128,28 @@ class InterventionPredictor:
         """
         if os.path.exists(self.model_path):
             try:
-                self.model.load_state_dict(torch.load(self.model_path, map_location="cpu"))
+                self.model.load_state_dict(torch.load(self.model_path, map_location="cpu", weights_only=True))
+                self.weights_loaded = True
             except Exception as e:
-                print(f"Warning: trained weights incompatible with current architecture ({e}). Using random init.")
+                print("Warning: incompatible weights; neural predictions are unavailable.")
         else:
-            print(f"Warning: No pre-trained model found at {self.model_path}. Using random initialization.")
+            print(f"Warning: No weights found at {self.model_path}; neural predictions are unavailable.")
 
-    def _train_calibrator(self):
-        X_dummy = np.random.rand(100, 1)
-        y_dummy = np.random.randint(0, 2, 100)
-        self.calibrator = CalibratedClassifierCV(LogisticRegression(), method="sigmoid", cv=3)
-        self.calibrator.fit(X_dummy, y_dummy)
+    def _train_calibrator(self, scores, labels):
+        X = np.asarray(scores, dtype=float).reshape(-1, 1)
+        y = np.asarray(labels)
+        if len(X) != len(y) or len(y) < 4 or set(y.tolist()) != {0, 1}:
+            raise ValueError("Calibration requires matching scores and both label classes")
+        if not np.isfinite(X).all() or (X < 0).any() or (X > 1).any():
+            raise ValueError("Calibration scores must be finite values in [0, 1]")
+        self.calibrator = LogisticRegression(random_state=42)
+        self.calibrator.fit(X, y)
 
     def predict(self, action_sequence: List[ActionFeature]) -> float:
+        if not self.weights_loaded:
+            raise RuntimeError("No compatible weights loaded; train or provide a model artifact first")
+        if not action_sequence:
+            raise ValueError("Action sequence cannot be empty")
         with torch.no_grad():
             prob = self.model(action_sequence).item()
 
@@ -148,24 +159,29 @@ class InterventionPredictor:
         return prob
 
     def should_intervene(self, action_sequence: List[ActionFeature], threshold: float = 0.5) -> bool:
+        if not self.weights_loaded:
+            return True  # Missing model: require human review, never use random weights.
         prob = self.predict(action_sequence)
         return prob > threshold
 
     def get_metrics(self, predictions: List[float], actuals: List[bool]) -> Dict[str, float]:
         from sklearn.metrics import roc_auc_score, brier_score_loss
 
-        auc = roc_auc_score(actuals, predictions)
+        if not predictions or len(predictions) != len(actuals):
+            raise ValueError("Metrics require nonempty matching predictions and labels")
+        auc = roc_auc_score(actuals, predictions) if len(set(actuals)) > 1 else None
         brier = brier_score_loss(actuals, predictions)
         pts = self._compute_pts(predictions, actuals)
 
         return {
             "auc_roc": auc,
             "brier_score": brier,
-            "pts": pts,
+            "pts": pts,  # Legacy name; this measures classification accuracy, not timing.
+            "classification_accuracy": pts,
         }
 
     def _compute_pts(self, predictions: List[float], actuals: List[bool]) -> float:
-        if len(predictions) != len(actuals):
-            return 0.0
+        if not predictions or len(predictions) != len(actuals):
+            raise ValueError("Accuracy requires nonempty matching predictions and labels")
         correct = sum(1 for p, a in zip(predictions, actuals) if (p > 0.5) == a)
         return correct / len(predictions)
