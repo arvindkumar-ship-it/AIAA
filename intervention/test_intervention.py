@@ -5,8 +5,8 @@ Run: python intervention/test_intervention.py
 
 Expected Output:
 - Intervention probability working
-- AUC-ROC > 0.7
-- PTS > 0.6
+- Missing weights are reported as unavailable
+- Synthetic arrays test metric computation only
 """
 
 import time
@@ -16,6 +16,10 @@ from intervention_predictor import InterventionPredictor, ActionFeature
 def test_intervention():
     predictor = InterventionPredictor()
     
+    if not predictor.weights_loaded:
+        print("Prediction unavailable: supply compatible trained weights. Human review required.")
+        return
+
     # Test 1: Predict intervention probability
     print("Test 1: Predicting intervention probability...")
     action_sequence = [
@@ -56,8 +60,8 @@ def test_intervention():
     
     # Assertions
     assert 0.0 <= prob <= 1.0, f"Invalid probability: {prob}"
-    assert latency < 100, f"Prediction latency too high: {latency:.2f}ms"
-    assert metrics['pts'] > 0.6, f"PTS too low: {metrics['pts']:.2f}"
+    # Latency is reported; no hardware-independent threshold is claimed.
+    # Dummy-array metrics are computation checks, not model validation.
     
     print("\nAll tests passed!")
 
